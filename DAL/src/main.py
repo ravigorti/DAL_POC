@@ -1,11 +1,10 @@
 import sys
-from DAL.src.exceptions import CustomException
-from DAL.src.logger import logging
+from cli.commands.json_file import json_file
+from cli.argumentParser import argument_parser
+from exceptions import CustomException
+from logger import logging
 
 if __name__ == "__main__":
-    try:
-        a = 1/0
-        print(a)
-    except Exception as e:
-        logging.info("Logging started")
-        raise CustomException(e, sys)
+    args=argument_parser()
+    json_file(args.json_file)
+
