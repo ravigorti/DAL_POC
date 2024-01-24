@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
+from DAL.src.exceptions import CustomException
+
 def dynamic_sql_query(json_file,csv_file):
    json_data = read_json(json_file)
    relationships_df = read_csv(csv_file)
@@ -22,17 +24,16 @@ def read_csv(csv_file):
 def generate_sql_query(json_data, relationships_df):
       
       if relationships_df is None or len(relationships_df) == 0:
-         print('No relevant relationships found!')
-         return None
+         raise CustomException('No relevant relationships found!')
+      
       json_tables = set(json_data['columns'].keys())
       relevant_relationships_df = relationships_df[
         (relationships_df['Table1'].isin(json_tables)) & (relationships_df['Table2'].isin(json_tables))
     ]
-      print(relevant_relationships_df)
+
       if len(json_tables)==len(relevant_relationships_df):
           relevant_relationships_df = relevant_relationships_df.drop(len(relevant_relationships_df)-1,axis='index')
 
-      print(relevant_relationships_df)
       env = Environment(loader=FileSystemLoader(r'/Users/ravitejagorti/Desktop/final_framework/DAL/DAL/src/templates'))
       template = env.get_template('template_sql_generator.jinja')
       

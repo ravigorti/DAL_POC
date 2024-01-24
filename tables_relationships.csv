@@ -1,4 +1,3 @@
 Table1,Table2,Condition
 Policy_table,Policy_Transaction,Policy_table.policy_id=Policy_Transaction.policy_id
 Policy_Coverage,Policy_table,Policy_table.transaction_id=Policy_Coverage.transaction_id
-Policy_Transaction,Policy_Coverage,Policy_Transaction.transaction_id=Policy_Coverage.transaction_id
