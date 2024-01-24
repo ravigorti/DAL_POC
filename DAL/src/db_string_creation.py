@@ -1,3 +1,6 @@
+import jinja2
+
+
 class DatabaseQuery:
     def __init__(self, json_config):
         self.json_config = json_config
@@ -22,15 +25,15 @@ class DatabaseQuery:
         sql_query = template.render(self.json_config)
         return sql_query
 
-    def execute_query(self):
-        sql_query = self.generate_sql_query()
-        print("Generated SQL Query:", sql_query)
-
-        conn = sqlite3.connect('mydatabase.sqlite')
-        cursor = conn.cursor()
-        cursor.execute(sql_query, self.json_config.get('conditions', {}))
-        results = cursor.fetchall()
-        print("Query Results:", results)
-
-        conn.commit()
-        conn.close()
+    # def execute_query(self):
+    #     sql_query = self.generate_sql_query()
+    #     print("Generated SQL Query:", sql_query)
+    #
+    #     conn = sqlite3.connect('mydatabase.sqlite')
+    #     cursor = conn.cursor()
+    #     cursor.execute(sql_query, self.json_config.get('conditions', {}))
+    #     results = cursor.fetchall()
+    #     print("Query Results:", results)
+    #
+    #     conn.commit()
+    #     conn.close()

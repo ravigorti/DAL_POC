@@ -12,20 +12,14 @@ def main():
                                            levels=2)
     file_path = os.path.join(parent_dir_path, "tables_relationships.csv")
 
-    #args=argument_parser()
-    json_file = r"C:\Users\amit.sahoo\OneDrive - Argo Group\DAL\Prototype\DAL_POC\sample3.json"
-    sql_query = dynamic_sql_query(#args.json_file,
-                                  json_file,
+    args=argument_parser()
+    #json_file = r"C:\Users\Amit\PycharmProjects\pythonProject\DAL\sample3.json"
+    sql_query = dynamic_sql_query(args.json_file,
+                                  #json_file,
                                    file_path)
     print(sql_query)
 
 
 if __name__ == "__main__":
     main()
-    
-    
-
-    
-
-
 

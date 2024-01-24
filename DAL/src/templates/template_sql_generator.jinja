@@ -1,6 +1,7 @@
-SELECT {%- for table, columns in config['columns'].items() -%}
+SELECT {{" "}}
+{%- for table, columns in config['columns'].items() -%}
     {%- for column in columns -%}
-         {{' '}}{{ table }}.{{ column }} ,
+         {{table}}.{{column}} {{"," if not loop.last}}
     {%- endfor -%}
 {%- endfor -%}
 FROM {{ relevant_relationships_df.iloc[0]['Table1'] }}
