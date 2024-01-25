@@ -25,10 +25,11 @@ def read_csv(csv_file):
 
 
 def generate_sql_query(json_data, relationships_df):
-    # if relationships_df is None or len(relationships_df) == 0:
-    #     raise CustomException('No relevant relationships found!')
 
-    json_tables = set(json_data['columns'].keys())
+    json_tables = set([list(i["table_column_mapping"].keys()) for i in json_data["source_data"]][0])
+    
+    
+    #json_tables = set(json_data["source_data"]['table_column_mapping'].keys())
     relevant_relationships_df = relationships_df[
         (relationships_df['Table1'].isin(json_tables)) & (relationships_df['Table2'].isin(json_tables))
         ]
@@ -41,7 +42,7 @@ def generate_sql_query(json_data, relationships_df):
     jinja_file_dir = os.path.join(parent_directory, "templates")
 
     env = Environment(loader=FileSystemLoader(jinja_file_dir))
-    template = env.get_template('template_sql_generator.jinja')
+    template = env.get_template('template_create_generator.jinja')
 
     rendered_query = template.render(
         config=json_data,

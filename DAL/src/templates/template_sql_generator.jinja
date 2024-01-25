@@ -1,12 +1,13 @@
-SELECT {{" "}}
-{%- for table, columns in config['columns'].items() -%}
-    {%- for column in columns -%}
-         {{table}}.{{column}} {{"," if not loop.last}}
+SELECT {{' '}}
+{%- for data in config['source_data'] -%}
+    {%- for table, columns in data['table_column_mapping'].items() -%}
+        {%- for column in columns -%}
+            {{data['database']}}.{{data['schema']}}.{{table}}.{{column}} {{',' if not loop.last}}
+        {%- endfor -%}
     {%- endfor -%}
 {%- endfor -%}
-FROM {{ relevant_relationships_df.iloc[0]['Table1'] }}
-{%- set join_conditions = [] -%}
-{%- for _, relationship in relevant_relationships_df.iterrows() -%}
-    {%- set join_conditions = join_conditions.append(' JOIN {} ON {}'.format(relationship['Table2'], relationship['Condition'])) -%}
-{%- endfor -%}
-{{','.join(join_conditions)}}
+
+
+
+
+
