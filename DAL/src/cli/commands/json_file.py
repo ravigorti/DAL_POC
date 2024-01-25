@@ -2,7 +2,7 @@ import json
 import os
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
-from DAL.src.utilities.utils import get_parent_directory
+from src.utilities.utils import get_parent_directory
 
 
 def dynamic_sql_query(json_file, csv_file):
