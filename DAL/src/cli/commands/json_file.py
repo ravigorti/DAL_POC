@@ -1,8 +1,10 @@
 import json
 import os
 import pandas as pd
+import sys
 from jinja2 import Environment, FileSystemLoader
 from src.utilities.utils import get_parent_directory
+from src.utilities.exceptions import CustomException
 
 
 def dynamic_sql_query(json_file, csv_file):
@@ -14,39 +16,47 @@ def dynamic_sql_query(json_file, csv_file):
 
 
 def read_json(json_file):
-    with open(json_file, 'r') as json_file:
-        config = json.load(json_file)
-        return config
-
+    try:
+        with open(json_file, 'r') as json_file:
+            config = json.load(json_file)
+            return config
+    except Exception as e:
+        raise CustomException(e)
 
 def read_csv(csv_file):
-    relationships_df = pd.read_csv(csv_file)
-    return relationships_df
+    try:
+        relationships_df = pd.read_csv(csv_file)
+        return relationships_df
+    except Exception as e:
+        raise CustomException(e)
 
 
 def generate_sql_query(json_data, relationships_df):
+    try:
 
-    json_tables = set([list(i["table_column_mapping"].keys()) for i in json_data["source_data"]][0])
-    
-    
-    #json_tables = set(json_data["source_data"]['table_column_mapping'].keys())
-    relevant_relationships_df = relationships_df[
-        (relationships_df['Table1'].isin(json_tables)) & (relationships_df['Table2'].isin(json_tables))
-        ]
+        json_tables = set([list(i["table_column_mapping"].keys()) for i in json_data["source_data"]][0])
+        
+        
+        #json_tables = set(json_data["source_data"]['table_column_mapping'].keys())
+        relevant_relationships_df = relationships_df[
+            (relationships_df['Table1'].isin(json_tables)) & (relationships_df['Table2'].isin(json_tables))
+            ]
 
-    if len(json_tables) == len(relevant_relationships_df):
-        relevant_relationships_df = relevant_relationships_df.drop(len(relevant_relationships_df) - 1, axis='index')
+        if len(json_tables) == len(relevant_relationships_df):
+            relevant_relationships_df = relevant_relationships_df.drop(len(relevant_relationships_df) - 1, axis='index')
 
-    parent_directory = get_parent_directory(path=str(os.path.dirname(__file__)),
-                                levels=2)
-    jinja_file_dir = os.path.join(parent_directory, "templates")
+        parent_directory = get_parent_directory(path=str(os.path.dirname(__file__)),
+                                    levels=2)
+        jinja_file_dir = os.path.join(parent_directory, "templates")
 
-    env = Environment(loader=FileSystemLoader(jinja_file_dir))
-    template = env.get_template('template_create_generator.jinja')
+        env = Environment(loader=FileSystemLoader(jinja_file_dir))
+        template = env.get_template('template_create_generator.jinja')
 
-    rendered_query = template.render(
-        config=json_data,
-        relevant_relationships_df=relevant_relationships_df
-    )
+        rendered_query = template.render(
+            config=json_data,
+            relevant_relationships_df=relevant_relationships_df
+        )
 
-    return rendered_query
+        return rendered_query
+    except Exception as e:
+        raise CustomException(e)
