@@ -19,10 +19,18 @@ def main():
     sql_query = dynamic_sql_query(#args.json_file,
                                   args.json_file,
                                   file_path)
+    review_query = input("\n\nGenerated SQL Query:\n\n\n" +'\33[33m' +sql_query +'\033[0m' +"\n\nProceed to execute the query? (yes/no): ").lower()
+    if review_query == 'yes':
+            # Execute the SQL query
+            execute_query(sql_query)
+    else:
+        print("SQL query execution aborted.")
+
     #print(sys.path)
-    print(sql_query)
 
-
+def execute_query(sql_query):
+     #use snowflake-python connector here
+     print("return the snowflake execution status here")
 
 if __name__ == "__main__":
     main()
